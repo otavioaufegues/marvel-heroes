@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import { SearchBox } from '../../components/SearchBox';
 import {
   Candidate,
   CandidateContainer,
@@ -22,6 +23,7 @@ export function Dashboard() {
           <Subtitle>TESTE FRONT-END</Subtitle>
         </TitleContainer>
       </Header>
+      <SearchBox title="Nome do Personagem" />
     </Container>
   );
 }
