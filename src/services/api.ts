@@ -15,6 +15,7 @@ export async function getHeroes(): Promise<AxiosResponse> {
         ts: timestamp,
         apikey: PUBLIC_KEY,
         hash: hash,
+        limit: 100,
       },
     });
   } catch (e) {
