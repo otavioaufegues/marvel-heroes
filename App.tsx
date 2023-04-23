@@ -11,8 +11,13 @@ import {
 
 import theme from './src/global/styles/theme';
 import { Dashboard } from './src/screens/Dashboard';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 
 export default function App() {
+  const navigationRef = useNavigationContainerRef();
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_900Black,
@@ -24,8 +29,10 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Dashboard />
-    </ThemeProvider>
+    <NavigationContainer ref={navigationRef}>
+      <ThemeProvider theme={theme}>
+        <Dashboard />
+      </ThemeProvider>
+    </NavigationContainer>
   );
 }
