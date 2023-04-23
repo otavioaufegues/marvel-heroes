@@ -5,18 +5,31 @@ const BASE_URL = 'https://gateway.marvel.com/v1/public/characters';
 const PUBLIC_KEY = '7672c5c12c9cf584287a2e2fa4ecb91e';
 const PRIVATE_KEY = 'f5dc2edffd2c7e2ceb77abd31545a4b3b002ad0d';
 
-export async function getHeroes(): Promise<AxiosResponse> {
+interface Params {
+  ts: string;
+  apikey: string;
+  hash: string;
+  limit: number;
+  nameStartsWith?: string;
+}
+
+export async function getHeroes(text: string): Promise<AxiosResponse> {
   const timestamp = Date.now().toString();
   const hash = md5(timestamp + PRIVATE_KEY + PUBLIC_KEY);
+  const params: Params = {
+    ts: timestamp,
+    apikey: PUBLIC_KEY,
+    hash: hash,
+    limit: 100,
+  };
+
+  if (text !== '') {
+    params['nameStartsWith'] = text;
+  }
 
   try {
     return await axios.get(BASE_URL, {
-      params: {
-        ts: timestamp,
-        apikey: PUBLIC_KEY,
-        hash: hash,
-        limit: 100,
-      },
+      params: params,
     });
   } catch (e) {
     throw handler(e);

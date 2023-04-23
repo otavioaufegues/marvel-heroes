@@ -22,22 +22,24 @@ import {
   TitleLine,
 } from './styles';
 
+import { Alert } from 'react-native';
+
 export function Dashboard() {
   const isFocused = useIsFocused();
   const [heroes, setHeroes] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
-  const [page, setPage] = useState(10);
+  const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
 
   const { execute, response, status, error } = useAsync(
-    () => getHeroes(),
+    () => getHeroes(searchText),
     false,
   );
 
   useEffect(() => {
     if (isFocused) {
       execute();
-      console.log('oi');
     }
   }, [isFocused]);
 
@@ -71,6 +73,10 @@ export function Dashboard() {
     );
   };
 
+  const search = () => {
+    execute();
+  };
+
   return (
     <Container>
       <Header>
@@ -83,7 +89,12 @@ export function Dashboard() {
         </TitleContainer>
         <TitleLine />
       </Header>
-      <TextInput label="Nome do Personagem" />
+      <TextInput
+        value={searchText}
+        label="Nome do Personagem"
+        onChangeText={setSearchText}
+        onEndEditing={search}
+      />
       <Heroes>
         {status === 'success' && renderHeroes()}
         {status === 'pending' && <ActivityIndicator />}
