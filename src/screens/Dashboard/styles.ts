@@ -59,7 +59,9 @@ export const ListHeaderLabel = styled.Text`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const HeroesList = styled.FlatList.attrs({})``;
+export const HeroesList = styled.FlatList.attrs({
+  showsVerticalScrollIndicator: false,
+})``;
 
 export const Footer = styled.View`
   width: 100%;

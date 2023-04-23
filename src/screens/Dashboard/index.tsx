@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ListItem, ListItemProps } from '../../components/ListItem';
+import { useIsFocused } from '@react-navigation/native';
 import { SearchBox } from '../../components/SearchBox';
+import { useAsync } from '../../hooks/useAsync';
+import { getHeroes } from '../../services/api';
 import {
   Candidate,
   CandidateContainer,
@@ -34,6 +37,34 @@ export function Dashboard() {
       name: 'joao',
     },
   ];
+
+  const isFocused = useIsFocused();
+  const [heroes, setHeroes] = useState([]);
+
+  const { execute, response, status, error } = useAsync(
+    () => getHeroes(),
+    false,
+  );
+
+  useEffect(() => {
+    if (isFocused) {
+      execute();
+      console.log('oi');
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (status === 'success') {
+      const heroesArray = response.data.data.results.map((hero) => ({
+        id: hero.id,
+        name: hero.name,
+        image: hero.thumbnail['path'] + '.' + hero.thumbnail['extension'],
+      }));
+      setHeroes(heroesArray);
+    }
+    console.log('e', error);
+  }, [status]);
+
   return (
     <Container>
       <Header>
@@ -46,16 +77,17 @@ export function Dashboard() {
         </TitleContainer>
       </Header>
       <SearchBox title="Nome do Personagem" />
-      <Heroes>
-        <ListHeader>
-          <ListHeaderLabel>Personagem</ListHeaderLabel>
-        </ListHeader>
-        <HeroesList
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ListItem data={item} />}
-        />
-      </Heroes>
+      {status === 'success' && (
+        <Heroes>
+          <ListHeader>
+            <ListHeaderLabel>Personagem</ListHeaderLabel>
+          </ListHeader>
+          <HeroesList
+            data={heroes}
+            renderItem={({ item }) => <ListItem data={item} />}
+          />
+        </Heroes>
+      )}
       <Footer />
     </Container>
   );
