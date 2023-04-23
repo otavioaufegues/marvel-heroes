@@ -3,13 +3,13 @@ import React from 'react';
 import { Container, SearchInput, SearchLabel } from './styles';
 
 interface Props {
-  title: string;
+  label: string;
 }
 
-export function SearchBox({ title }: Props) {
+export function TextInput({ label }: Props) {
   return (
     <Container>
-      <SearchLabel>{title}</SearchLabel>
+      <SearchLabel>{label}</SearchLabel>
       <SearchInput />
     </Container>
   );
