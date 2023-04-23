@@ -6,16 +6,21 @@ export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
 `;
+export const TitleLine = styled.View`
+  background-color: ${({ theme }) => theme.colors.primary};
+  width: ${RFValue(54)}px;
+  height: ${RFValue(4)}px;
+`;
 
 export const Header = styled.View`
   width: 100%;
   margin-top: ${StatusBar.currentHeight}px;
   height: ${RFPercentage(9)};
+  padding: 0 15px;
 `;
 
 export const TitleContainer = styled.View`
   flex-direction: row;
-  padding: 0 15px;
 `;
 
 export const Title = styled.Text`
@@ -38,7 +43,7 @@ export const Candidate = styled.Text`
 export const CandidateContainer = styled.View`
   width: 100%;
   align-items: flex-end;
-  padding: 5px 15px;
+  padding: 5px 0;
 `;
 
 export const Heroes = styled.View`
@@ -63,8 +68,22 @@ export const HeroesList = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
 })``;
 
-export const Footer = styled.View`
+export const FooterLine = styled.View`
   width: 100%;
   background: ${({ theme }) => theme.colors.primary};
   height: ${RFValue(12)}px;
 `;
+
+export const Footer = styled.View`
+  width: 100%;
+  background: ${({ theme }) => theme.colors.white};
+  height: ${RFPercentage(10)};
+  align-items: flex-end;
+`;
+
+export const ActivityIndicator = styled.ActivityIndicator.attrs(
+  ({ theme }) => ({
+    size: 50,
+    color: theme.colors.primary,
+  }),
+)``;

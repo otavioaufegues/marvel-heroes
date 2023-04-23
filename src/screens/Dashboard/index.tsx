@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ListItem, ListItemProps } from '../../components/ListItem';
 import { useIsFocused } from '@react-navigation/native';
-import { SearchBox } from '../../components/SearchBox';
+import { TextInput } from '../../components/TextInput';
 import { useAsync } from '../../hooks/useAsync';
 import { getHeroes } from '../../services/api';
 import {
@@ -17,29 +17,17 @@ import {
   ListHeader,
   ListHeaderLabel,
   Footer,
+  FooterLine,
+  ActivityIndicator,
+  TitleLine,
 } from './styles';
 
 export function Dashboard() {
-  const data = [
-    {
-      id: 1,
-      image: 'https://avatars.githubusercontent.com/u/18270045?v=4',
-      name: 'Otavio',
-    },
-    {
-      id: 2,
-      image: 'https://avatars.githubusercontent.com/u/18270045?v=4',
-      name: 'pedro',
-    },
-    {
-      id: 3,
-      image: 'https://avatars.githubusercontent.com/u/18270045?v=4',
-      name: 'joao',
-    },
-  ];
-
   const isFocused = useIsFocused();
   const [heroes, setHeroes] = useState([]);
+
+  const [page, setPage] = useState(10);
+  const [perPage, setPerPage] = useState(10);
 
   const { execute, response, status, error } = useAsync(
     () => getHeroes(),
@@ -65,6 +53,24 @@ export function Dashboard() {
     console.log('e', error);
   }, [status]);
 
+  const renderHeroes = () => {
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    const heroesToRender = heroes.slice(startIndex, endIndex);
+
+    return (
+      <>
+        <ListHeader>
+          <ListHeaderLabel>Personagem</ListHeaderLabel>
+        </ListHeader>
+        <HeroesList
+          data={heroesToRender}
+          renderItem={({ item }) => <ListItem data={item} />}
+        />
+      </>
+    );
+  };
+
   return (
     <Container>
       <Header>
@@ -75,20 +81,15 @@ export function Dashboard() {
           <Title>BUSCA MARVEL</Title>
           <Subtitle>TESTE FRONT-END</Subtitle>
         </TitleContainer>
+        <TitleLine />
       </Header>
-      <SearchBox title="Nome do Personagem" />
-      {status === 'success' && (
-        <Heroes>
-          <ListHeader>
-            <ListHeaderLabel>Personagem</ListHeaderLabel>
-          </ListHeader>
-          <HeroesList
-            data={heroes}
-            renderItem={({ item }) => <ListItem data={item} />}
-          />
-        </Heroes>
-      )}
-      <Footer />
+      <TextInput label="Nome do Personagem" />
+      <Heroes>
+        {status === 'success' && renderHeroes()}
+        {status === 'pending' && <ActivityIndicator />}
+      </Heroes>
+      <Footer></Footer>
+      <FooterLine />
     </Container>
   );
 }
