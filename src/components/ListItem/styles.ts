@@ -9,6 +9,7 @@ export const Container = styled.View`
   align-items: center;
   border-bottom-color: ${({ theme }) => theme.colors.secundary};
   border-bottom-width: 2px;
+  flex-wrap: wrap;
 `;
 
 export const Image = styled.Image`
@@ -19,7 +20,10 @@ export const Image = styled.Image`
 `;
 
 export const Name = styled.Text`
+  width: 70%;
   font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme }) => theme.colors.text};
   font-size: ${RFValue(21)}px;
+  flex-wrap: wrap;
+  word-wrap: break-word;
 `;
