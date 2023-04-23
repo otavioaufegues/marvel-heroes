@@ -7,6 +7,7 @@ export default {
     text: '#4E4E4E',
     text_light: '#A5A5A5',
     background: '#fff',
+    white: '#fff',
   },
 
   fonts: {
