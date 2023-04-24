@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
-
+import { TouchableOpacity, Alert } from 'react-native';
 import { ListItem } from '../../components/ListItem';
 import { TextInput } from '../../components/TextInput';
 import { useAsync } from '../../hooks/useAsync';
@@ -28,26 +26,18 @@ import {
   PagesContainer,
 } from './styles';
 
-export function Dashboard() {
-  const isFocused = useIsFocused();
+export default function Dashboard({ navigation }) {
   const [heroes, setHeroes] = useState([]);
   const [searchText, setSearchText] = useState('');
 
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [pagesArray, setPagesArray] = useState<number[]>([]);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(4);
 
-  const { execute, response, status, error } = useAsync(
-    () => getHeroes(searchText),
-    false,
+  const { execute, response, status, error } = useAsync(() =>
+    getHeroes(searchText),
   );
-
-  useEffect(() => {
-    if (isFocused) {
-      execute();
-    }
-  }, [isFocused]);
 
   useEffect(() => {
     if (status === 'success') {
@@ -68,7 +58,6 @@ export function Dashboard() {
       setPage(1);
       setHeroes(heroesArray);
     }
-    console.log('e', error);
   }, [status]);
 
   const renderHeroes = () => {
@@ -83,7 +72,13 @@ export function Dashboard() {
         </ListHeader>
         <HeroesList
           data={heroesToRender}
-          renderItem={({ item }) => <ListItem data={item} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Hero', { heroId: item.id })}
+            >
+              <ListItem data={item} />
+            </TouchableOpacity>
+          )}
         />
       </>
     );

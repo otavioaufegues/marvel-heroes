@@ -36,6 +36,23 @@ export async function getHeroes(text: string): Promise<AxiosResponse> {
   }
 }
 
+export async function getHero(heroId: string): Promise<AxiosResponse> {
+  const timestamp = Date.now().toString();
+  const hash = md5(timestamp + PRIVATE_KEY + PUBLIC_KEY);
+
+  try {
+    return await axios.get(BASE_URL + '/' + heroId, {
+      params: {
+        ts: timestamp,
+        apikey: PUBLIC_KEY,
+        hash: hash,
+      },
+    });
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export function handler(err: any): Error {
   let error = err;
 

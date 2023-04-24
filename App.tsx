@@ -10,14 +10,9 @@ import {
 } from '@expo-google-fonts/roboto';
 
 import theme from './src/global/styles/theme';
-import { Dashboard } from './src/screens/Dashboard';
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
+import Router from './src/Router';
 
 export default function App() {
-  const navigationRef = useNavigationContainerRef();
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_900Black,
@@ -29,10 +24,8 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      <ThemeProvider theme={theme}>
-        <Dashboard />
-      </ThemeProvider>
-    </NavigationContainer>
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
   );
 }
