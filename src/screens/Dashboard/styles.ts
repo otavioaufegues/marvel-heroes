@@ -1,6 +1,11 @@
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { StatusBar } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+
+interface PaginationProps {
+  current: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -78,7 +83,15 @@ export const Footer = styled.View`
   width: 100%;
   background: ${({ theme }) => theme.colors.white};
   height: ${RFPercentage(10)};
-  align-items: flex-end;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+export const PagesContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
 `;
 
 export const ActivityIndicator = styled.ActivityIndicator.attrs(
@@ -87,3 +100,39 @@ export const ActivityIndicator = styled.ActivityIndicator.attrs(
     color: theme.colors.primary,
   }),
 )``;
+
+export const AntDesignIcon = styled(AntDesign)`
+  color: ${({ theme }) => theme.colors.secondary};
+  font-size: ${RFValue(16)}px;
+`;
+
+export const CircleNumber = styled.TouchableOpacity<PaginationProps>`
+  width: ${RFValue(40)}px;
+  height: ${RFValue(40)}px;
+  border-radius: ${RFValue(20)}px;
+  border-width: 2px;
+  border-color: ${({ theme }) => theme.colors.primary};
+  justify-content: center;
+  align-items: center;
+  margin: 0 ${RFValue(10)}px;
+  ${(props) =>
+    props.current &&
+    css`
+      background-color: ${({ theme }) => theme.colors.primary};
+    `};
+`;
+
+export const PaginationText = styled.Text<PaginationProps>`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(21)}px;
+  ${(props) =>
+    props.current &&
+    css`
+      color: ${({ theme }) => theme.colors.white};
+    `};
+  ${(props) =>
+    !props.current &&
+    css`
+      color: ${({ theme }) => theme.colors.primary};
+    `};
+`;

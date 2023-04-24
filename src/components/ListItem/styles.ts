@@ -7,7 +7,7 @@ export const Container = styled.View`
   padding: 10px;
   margin-bottom: 10px;
   align-items: center;
-  border-bottom-color: ${({ theme }) => theme.colors.secundary};
+  border-bottom-color: ${({ theme }) => theme.colors.secondary};
   border-bottom-width: 2px;
   flex-wrap: wrap;
 `;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ListItem, ListItemProps } from '../../components/ListItem';
+import { TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+
+import { ListItem } from '../../components/ListItem';
 import { TextInput } from '../../components/TextInput';
 import { useAsync } from '../../hooks/useAsync';
 import { getHeroes } from '../../services/api';
@@ -20,9 +22,11 @@ import {
   FooterLine,
   ActivityIndicator,
   TitleLine,
+  AntDesignIcon,
+  CircleNumber,
+  PaginationText,
+  PagesContainer,
 } from './styles';
-
-import { Alert } from 'react-native';
 
 export function Dashboard() {
   const isFocused = useIsFocused();
@@ -30,6 +34,8 @@ export function Dashboard() {
   const [searchText, setSearchText] = useState('');
 
   const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [pagesArray, setPagesArray] = useState<number[]>([]);
   const [perPage, setPerPage] = useState(10);
 
   const { execute, response, status, error } = useAsync(
@@ -50,6 +56,16 @@ export function Dashboard() {
         name: hero.name,
         image: hero.thumbnail['path'] + '.' + hero.thumbnail['extension'],
       }));
+
+      const numPages = Math.ceil(heroesArray.length / perPage);
+      const ArrayPages = Array.from(
+        { length: Math.ceil(heroesArray.length / perPage) },
+        (_, i) => i + 1,
+      );
+
+      setPages(numPages);
+      setPagesArray(ArrayPages);
+      setPage(1);
       setHeroes(heroesArray);
     }
     console.log('e', error);
@@ -77,6 +93,15 @@ export function Dashboard() {
     execute();
   };
 
+  const nextPage = () => {
+    const pg = page + 1 >= pages ? pages : page + 1;
+    setPage(pg);
+  };
+  const prevPage = () => {
+    const pg = page - 1 <= 0 ? 1 : page - 1;
+    setPage(pg);
+  };
+
   return (
     <Container>
       <Header>
@@ -99,7 +124,41 @@ export function Dashboard() {
         {status === 'success' && renderHeroes()}
         {status === 'pending' && <ActivityIndicator />}
       </Heroes>
-      <Footer></Footer>
+      {status === 'success' && (
+        <Footer>
+          <TouchableOpacity onPress={prevPage}>
+            <AntDesignIcon name="caretleft" />
+          </TouchableOpacity>
+
+          <PagesContainer>
+            {pagesArray.map((currentPage) => {
+              if (
+                currentPage === page ||
+                currentPage === page - 1 ||
+                currentPage === page + 1 ||
+                (currentPage === page + 2 && page === 1) ||
+                (currentPage === page - 2 && page === pages)
+              ) {
+                return (
+                  <CircleNumber
+                    key={currentPage}
+                    onPress={() => setPage(currentPage)}
+                    current={page === currentPage}
+                  >
+                    <PaginationText current={page === currentPage}>
+                      {currentPage}
+                    </PaginationText>
+                  </CircleNumber>
+                );
+              }
+            })}
+          </PagesContainer>
+
+          <TouchableOpacity onPress={nextPage}>
+            <AntDesignIcon name="caretright" />
+          </TouchableOpacity>
+        </Footer>
+      )}
       <FooterLine />
     </Container>
   );
