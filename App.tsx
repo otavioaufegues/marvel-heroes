@@ -12,6 +12,10 @@ import {
 import theme from './src/global/styles/theme';
 import Router from './src/Router';
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
