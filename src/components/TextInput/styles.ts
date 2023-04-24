@@ -11,6 +11,7 @@ export const SearchInput = styled.TextInput`
   border: 1px solid ${({ theme }) => theme.colors.text_light};
   border-radius: 5px;
   height: ${RFValue(31)}px;
+  padding: 0 8px;
 `;
 
 export const SearchLabel = styled.Text`
