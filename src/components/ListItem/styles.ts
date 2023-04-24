@@ -25,5 +25,4 @@ export const Name = styled.Text`
   color: ${({ theme }) => theme.colors.text};
   font-size: ${RFValue(21)}px;
   flex-wrap: wrap;
-  word-wrap: break-word;
 `;
