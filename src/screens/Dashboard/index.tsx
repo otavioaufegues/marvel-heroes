@@ -71,6 +71,7 @@ export default function Dashboard({ navigation }) {
           <ListHeaderLabel>Personagem</ListHeaderLabel>
         </ListHeader>
         <HeroesList
+          testID="heroes-list-test"
           data={heroesToRender}
           renderItem={({ item }) => (
             <TouchableOpacity

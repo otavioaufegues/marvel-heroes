@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import Dashboard from '../../screens/Dashboard';
 import { ThemeProvider } from 'styled-components/native';
@@ -9,25 +9,38 @@ const Providers: React.FC = ({ children }) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 
-jest.mock('axios', () => {
+jest.mock('../../hooks/useAsync', () => {
   return {
-    get: () => {
+    useAsync: () => {
       return {
-        data: {
+        execute: () => {},
+        response: {
           data: {
-            results: [
-              {
-                id: 1,
-                name: 'Spider-Man',
-                thumbnail: {
-                  path: 'https://example.com/spiderman',
-                  extension: 'jpg',
+            data: {
+              results: [
+                {
+                  id: 1,
+                  name: 'Spider-Man',
+                  thumbnail: {
+                    path: 'https://example.com/spiderman',
+                    extension: 'jpg',
+                  },
+                  description: 'The amazing Spider-Man!',
                 },
-                description: 'The amazing Spider-Man!',
-              },
-            ],
+                {
+                  id: 2,
+                  name: 'Iron Man',
+                  thumbnail: {
+                    path: 'https://example.com/spiderman',
+                    extension: 'jpg',
+                  },
+                  description: 'The invincible iron man!',
+                },
+              ],
+            },
           },
         },
+        status: 'success',
       };
     },
   };
@@ -58,17 +71,29 @@ describe('Dashboard', () => {
     const textInput = getByTestId('search-text-input');
     expect(textInput).toBeDefined();
   });
+
+  it('should render the heroes list correctly', async () => {
+    const navigation = { navigate: jest.fn() };
+    const { getByTestId } = render(<Dashboard navigation={navigation} />, {
+      wrapper: Providers,
+    });
+    const heroesList = getByTestId('heroes-list-test');
+    await waitFor(() => {
+      expect(heroesList).toBeDefined();
+    });
+  });
+
+  it('should navigate to hero details when hero is pressed', () => {
+    const navigation = { navigate: jest.fn() };
+    const { getByText } = render(<Dashboard navigation={navigation} />, {
+      wrapper: Providers,
+    });
+    const listItem = getByText('Iron Man');
+
+    fireEvent.press(listItem);
+
+    expect(navigation.navigate).toHaveBeenCalledWith('Hero', {
+      heroId: 2,
+    });
+  });
 });
-
-// it('should navigate to hero details when hero is pressed', () => {
-//   const navigation = { navigate: jest.fn() };
-//   const { getByTestId } = render(<Dashboard navigation={navigation} />);
-//   const mockedHero = { id: 1, name: 'Iron Man' };
-//   const listItem = getByTestId('list-item');
-
-//   fireEvent.press(listItem);
-
-//   expect(navigation.navigate).toHaveBeenCalledWith('Hero', {
-//     heroId: mockedHero.id,
-//   });
-// });

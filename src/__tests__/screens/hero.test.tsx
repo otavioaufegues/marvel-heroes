@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
-import Hero from '../../screens/Hero';
-import { getHero } from '../../services/api';
 
+import Hero from '../../screens/Hero';
 import { ThemeProvider } from 'styled-components/native';
 import theme from '../../global/styles/theme';
 
@@ -36,10 +35,9 @@ jest.mock('../../services/api', () => {
 
 describe('Hero', () => {
   it('should render hero details', async () => {
-    const { getByText, getByTestId } = render(
-      <Hero route={{ params: { heroId: 1 } }} />,
-      { wrapper: Providers },
-    );
+    const { getByText } = render(<Hero route={{ params: { heroId: 1 } }} />, {
+      wrapper: Providers,
+    });
 
     await waitFor(() => {
       expect(getByText('Spider-Man')).toBeTruthy();
