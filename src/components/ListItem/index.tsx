@@ -14,8 +14,8 @@ interface Props {
 export function ListItem({ data }: Props) {
   return (
     <Container>
-      <Image source={{ uri: data.image }} />
-      <Name>{data.name}</Name>
+      <Image testID="list-item-image" source={{ uri: data.image }} />
+      <Name testID="list-item-name">{data.name}</Name>
     </Container>
   );
 }
