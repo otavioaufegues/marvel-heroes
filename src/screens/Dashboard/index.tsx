@@ -110,10 +110,12 @@ export default function Dashboard({ navigation }) {
         <TitleLine />
       </Header>
       <TextInput
+        testID="search-text-input"
         value={searchText}
         label="Nome do Personagem"
         onChangeText={setSearchText}
         onEndEditing={search}
+        placeholder="Spider-Man"
       />
       <Heroes>
         {status === 'success' && renderHeroes()}
